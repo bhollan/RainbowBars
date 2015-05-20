@@ -1,0 +1,122 @@
+<html>
+<meta charset="utf-8">
+<head>
+<script type="text/javascript" src="First.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+	testing updation...
+	<input type="button" value="test" onclick="values = refreshGraph()" />
+
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
+<script>
+
+
+var margin = {top: 10, right: 30, bottom: 30, left: 30},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+    
+
+var svg = d3.select("body").append("svg")
+	.attr("class","canvas")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height);
+
+function refreshGraph () {
+	vals = recalculateData();
+	redraw(vals);
+	
+};
+
+function recalculateData () {
+	var population = 100,
+		min = 0,
+		max = 10,
+		i = 0,
+		vals = [];
+	
+	while (i < population) {
+		vals.push(Math.random()*max + min);
+		i++;
+	};
+	return vals;
+};
+
+function redraw(vals) {
+
+	var barWidth = 15;
+	
+	var yScale = d3.scale.linear()
+				.domain([0,10])
+				.range([0, height]);
+	
+	var bar = d3.select(".canvas").selectAll("g")
+				.data(vals);
+
+	bar.exit().remove();
+	
+	var gMan = bar.enter().append("g")
+				.attr("transform",function (d, i) {return "translate(" + i*barWidth + "," + height + ")";})
+				.attr("class", "bars");
+	
+	gMan.append("rect")
+				.attr("class","rects")
+				.attr("x",0)
+				.attr("y",0)
+				.attr("width", 0)
+				.attr("height", 0);
+	
+// 	gMan.append("text")
+// 				.attr()
+	
+	bar
+			.transition()
+			.duration(700)
+				.attr("transform", function (d, i) {return "translate(" + i*barWidth + "," + (height - yScale(d)) + ")"})
+				.attr("height", function(d) {return height - yScale(d);});
+	
+	bar = d3.selectAll(".rects").data(vals)		//we have to re-bind the rects to the data because 'bar' previously only had 'g's 
+				.attr("fill",function(d) {return get_random_color()} )  //color will change instantly, but... 
+			.transition()
+			.duration(700)												//'width' and 'height' will change over transition() 
+				.attr("width", barWidth - 1)
+				.attr("height", function(d) {return yScale(d);});
+};
+
+function get_random_color() {
+	  function c() {
+	    return Math.floor(Math.random()*256).toString(16)
+	  }
+	  return "#"+c()+c()+c();
+	};
+
+refreshGraph();
+
+setInterval("refreshGraph();",2000);
+
+</script>
+</body>
+</html>
