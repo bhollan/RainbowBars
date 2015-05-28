@@ -1,49 +1,101 @@
 <html>
 <meta charset="utf-8">
 <head>
-<script type="text/javascript" src="First.js"></script>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 </head>
-<body>
-	testing updation...
-	<input type="button" value="test" onclick="values = refreshGraph()" />
-
 <style>
 
-body {
-  font: 10px sans-serif;
-}
-
-.bar rect {
-  fill: steelblue;
-  shape-rendering: crispEdges;
-}
-
-.bar text {
-  fill: #fff;
-}
-
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
+    #container {
+        margin-left: inherit;
+        width: 70%;
+    }
 </style>
-<body>
-<script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
-<script>
+</html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640">
 
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Rainbowbars by bhollan</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/bhollan/RainbowBars">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Rainbowbars</h1>
+            <h2>Sanity check while learning D3</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/bhollan/RainbowBars/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/bhollan/RainbowBars/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+      <section id="main_content">
+        <div id="container"></div>(wait 5 seconds, or click anywhere)  <!--This is the container for the SVG rainbowbars-->
+        <h3>
+<a id="meet-rainbow-bars" class="anchor" href="#meet-rainbow-bars" aria-hidden="true"><span class="octicon octicon-link"></span></a>Meet Rainbow Bars</h3>
+
+<p>This is something I created as a kind of "sanity check" in D3.  I was having trouble obtaining the behavior I wanted for another project, <a href="http://bhollan.github.io/SixSigmaStopwatch/">SixSigmaStopwatch</a>, and so I just wanted to see if I could get it to work on a clean slate.  I did.  Here it is.</p>
+
+<h3>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h3>
+
+<p>Pull Requests.</p>
+
+<h3>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out the documentation at <a href="https://help.github.com/pages">https://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.  The author can be tweached <a href = "https://twitter.com/BeeHollander">@beehollander</a>.</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/bhollan">bhollan</a> can be found on <a href="https://github.com/bhollan/RainbowBars">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="https://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+    <script>
 
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
-    width = 960 - margin.left - margin.right,
+    width = 500 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
     
-
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#container").append("svg")
 	.attr("class","canvas")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height);
+    .attr("height", height)
+    .on("click", function() {refreshGraph()});
 
 function refreshGraph () {
 	vals = recalculateData();
@@ -67,7 +119,7 @@ function recalculateData () {
 
 function redraw(vals) {
 
-	var barWidth = 15;
+	var barWidth = 5;
 	
 	var yScale = d3.scale.linear()
 				.domain([0,10])
@@ -89,9 +141,6 @@ function redraw(vals) {
 				.attr("width", 0)
 				.attr("height", 0);
 	
-// 	gMan.append("text")
-// 				.attr()
-	
 	bar
 			.transition()
 			.duration(700)
@@ -100,10 +149,12 @@ function redraw(vals) {
 	
 	bar = d3.selectAll(".rects").data(vals)		//we have to re-bind the rects to the data because 'bar' previously only had 'g's 
 				.attr("fill",function(d) {return get_random_color()} )  //color will change instantly, but... 
-			.transition()
-			.duration(700)												//'width' and 'height' will change over transition() 
+            .transition()                               //'width' and 'height' will change over transition() 
+            .duration(700)
 				.attr("width", barWidth - 1)
 				.attr("height", function(d) {return yScale(d);});
+
+    
 };
 
 function get_random_color() {
@@ -115,8 +166,7 @@ function get_random_color() {
 
 refreshGraph();
 
-setInterval("refreshGraph();",2000);
+setInterval("refreshGraph();",5000);
 
 </script>
-</body>
 </html>
