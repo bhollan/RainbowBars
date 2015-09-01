@@ -1,5 +1,5 @@
 # RainbowBars
-Sanity check while learning D3
+Sanity check in D3
 
 OK, so I've worked in software for years now, I just can't show you any of it. I worked at Lockheed Martin and made some GUIs, wrote some test software for hardware testers and did Integration work on it for a few years. I just can't show any of it to you.
 
